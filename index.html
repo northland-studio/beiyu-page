@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北域工作室 | Northland Studio</title>
+    <link rel="icon" href="1.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="1.ico" type="image/x-icon">
+    <style>
+        @font-face {
+            font-family: 'PingFang';
+            src: url('pingfang.ttf') format('truetype');
+            font-weight: 300 700;
+            font-display: swap;
+        }
+
+        :root {
+            --primary: #004AAD;
+            --primary-light: #0066CC;
+            --primary-dark: #003580;
+            --accent: #00D4FF;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-dark: #000000;
+            --gradient-primary: linear-gradient(135deg, #004AAD 0%, #0066CC 50%, #00D4FF 100%);
+            --gradient-dark: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+            --shadow-soft: 0 4px 30px rgba(0, 74, 173, 0.1);
+            --shadow-medium: 0 8px 40px rgba(0, 74, 173, 0.15);
+            --shadow-large: 0 20px 60px rgba(0, 74, 173, 0.2);
+            --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'PingFang', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 5%;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s var(--transition-smooth);
+        }
+
+        .nav-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-logo-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo-text-en {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.8;
+            transition: all 0.3s var(--transition-smooth);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .nav-links a .nav-en {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s var(--transition-smooth);
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 5% 80px;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(0, 74, 173, 0.03) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(0, 74, 173, 0.08) 0%, rgba(0, 212, 255, 0.08) 100%);
+            border: 1px solid rgba(0, 74, 173, 0.15);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s var(--transition-smooth) 0.2s forwards;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s var(--transition-smooth) 0.4s forwards;
+        }
+
+        .hero-title-gradient {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 40px;
+            letter-spacing: -0.01em;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s var(--transition-smooth) 0.6s forwards;
+        }
+
+        .hero-signature {
+            width: 280px;
+            height: auto;
+            margin: 40px auto 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s var(--transition-smooth) 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--transition-smooth) 1.2s forwards;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .scroll-indicator-icon {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(0, 74, 173, 0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: scrollDown 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { opacity: 1; top: 8px; }
+            100% { opacity: 0; top: 20px; }
+        }
+
+        .section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+        }
+
+        .section-label .label-en {
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.7;
+            letter-spacing: 0.08em;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .about-section {
+            background: var(--bg-secondary);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-card {
+            background: var(--bg-primary);
+            border-radius: 24px;
+            padding: 48px 40px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .about-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .about-card-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .about-card-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: white;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .about-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .about-card-title-en {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        .about-card-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .about-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .about-card-tag {
+            padding: 6px 14px;
+            background: rgba(0, 74, 173, 0.08);
+            color: var(--primary);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .services-section {
+            background: var(--bg-primary);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 28px;
+            padding: 56px 48px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--transition-smooth);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .service-card-number {
+            font-size: 4rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.15;
+            position: absolute;
+            top: 20px;
+            right: 32px;
+            line-height: 1;
+        }
+
+        .service-card-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .service-card-title-en {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        .service-card-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .service-card-list {
+            list-style: none;
+        }
+
+        .service-card-list li {
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .service-card-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .features-section {
+            background: var(--gradient-dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .features-section .section-header {
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-section .section-label {
+            color: var(--accent);
+        }
+
+        .features-section .section-title {
+            color: white;
+        }
+
+        .features-section .section-desc {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 24px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-8px);
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(0, 74, 173, 0.4) 0%, rgba(0, 212, 255, 0.4) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke: white;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .feature-title-en {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .contact-section {
+            background: var(--bg-secondary);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 36px 32px;
+            text-align: center;
+            transition: all 0.4s var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(40px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(0, 74, 173, 0.2);
+        }
+
+        .contact-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
+            background: rgba(0, 74, 173, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .contact-icon svg[fill="currentColor"] {
+            fill: var(--primary);
+            stroke: none;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .contact-label-en {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .contact-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .contact-value a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s var(--transition-smooth);
+        }
+
+        .contact-value a:hover {
+            color: var(--primary-light);
+        }
+
+        .cta-section {
+            background: var(--bg-primary);
+            text-align: center;
+            padding: 100px 5%;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .cta-desc {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: var(--gradient-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.4s var(--transition-smooth);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-large);
+        }
+
+        .cta-button svg {
+            transition: transform 0.3s var(--transition-smooth);
+        }
+
+        .cta-button:hover svg {
+            transform: translateX(4px);
+        }
+
+        .footer {
+            background: var(--bg-dark);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 60px 5% 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo img {
+            height: 28px;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        .footer-logo-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s var(--transition-smooth);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-copyright {
+            width: 100%;
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            margin: 5px 0;
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 100px 5% 60px;
+            }
+
+            .section {
+                padding: 80px 5%;
+            }
+
+            .about-card {
+                padding: 36px 28px;
+            }
+
+            .service-card {
+                padding: 40px 32px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--transition-smooth);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <img src="2.png" alt="北域工作室">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <span class="nav-logo-text">北域工作室</span>
+                <span class="nav-logo-text-en">Northland Studio</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">关于我们<span class="nav-en">About</span></a></li>
+            <li><a href="#services">核心业务<span class="nav-en">Services</span></a></li>
+            <li><a href="#features">项目特色<span class="nav-en">Features</span></a></li>
+            <li><a href="#contact">联系我们<span class="nav-en">Contact</span></a></li>
+        </ul>
+        <button class="mobile-menu-btn" aria-label="菜单">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                创意无限 · 技术驱动 · 品质至上
+            </div>
+            <h1 class="hero-title">
+                <span class="hero-title-gradient">北域工作室</span>
+            </h1>
+            <p class="hero-subtitle">将艺术创意与技术创新完美结合<br>为您提供优质的数字化解决方案</p>
+            <img src="signature.svg" alt="签名" class="hero-signature">
+        </div>
+        <div class="scroll-indicator">
+            <span>探索更多</span>
+            <div class="scroll-indicator-icon"></div>
+        </div>
+    </section>
+
+    <section class="section about-section" id="about">
+        <div class="section-header reveal">
+            <span class="section-label">关于我们<span class="label-en">About Us</span></span>
+            <h2 class="section-title">专注于数字创意和技术开发</h2>
+            <p class="section-desc">北域工作室成立于2025年8月23日，是一个综合性工作室，致力于为客户提供优质的数字化解决方案。</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-card stagger-1">
+                <div class="about-card-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                </div>
+                <h3 class="about-card-title">平面设计</h3>
+                <p class="about-card-title-en">Graphic Design</p>
+                <p class="about-card-desc">运用专业设计工具，为品牌打造独特的视觉形象，从VI设计到宣传物料，全方位满足设计需求。</p>
+                <div class="about-card-tags">
+                    <span class="about-card-tag">Photoshop</span>
+                    <span class="about-card-tag">InDesign</span>
+                    <span class="about-card-tag">Lightroom</span>
+                </div>
+            </div>
+            <div class="about-card stagger-2">
+                <div class="about-card-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </div>
+                <h3 class="about-card-title">影音制作</h3>
+                <p class="about-card-title-en">Video Production</p>
+                <p class="about-card-desc">从三维动画到视频剪辑，提供专业的影音制作服务，让创意以最生动的方式呈现。</p>
+                <div class="about-card-tags">
+                    <span class="about-card-tag">Blender</span>
+                    <span class="about-card-tag">Premiere</span>
+                    <span class="about-card-tag">特效制作</span>
+                </div>
+            </div>
+            <div class="about-card stagger-3">
+                <div class="about-card-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="16" cy="12" r="1"/><circle cx="18" cy="10" r="1"/></svg>
+                </div>
+                <h3 class="about-card-title">Minecraft 开发</h3>
+                <p class="about-card-title-en">Minecraft Development</p>
+                <p class="about-card-desc">模组开发、资源制作、服务器运营，在Minecraft生态中创造无限可能。</p>
+                <div class="about-card-tags">
+                    <span class="about-card-tag">Fabric</span>
+                    <span class="about-card-tag">Forge</span>
+                    <span class="about-card-tag">NeoForge</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section services-section" id="services">
+        <div class="section-header reveal">
+            <span class="section-label">核心业务<span class="label-en">Core Services</span></span>
+            <h2 class="section-title">全方位数字化服务</h2>
+            <p class="section-desc">涵盖多个领域的专业服务，满足您的各类数字化需求</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card stagger-1">
+                <span class="service-card-number">01</span>
+                <h3 class="service-card-title">品牌视觉设计</h3>
+                <p class="service-card-title-en">Brand Visual Design</p>
+                <p class="service-card-desc">打造独特的品牌形象，让您的品牌在市场中脱颖而出</p>
+                <ul class="service-card-list">
+                    <li>品牌VI设计与升级</li>
+                    <li>海报与宣传物料设计</li>
+                    <li>UI界面设计</li>
+                    <li>产品包装设计</li>
+                </ul>
+            </div>
+            <div class="service-card stagger-2">
+                <span class="service-card-number">02</span>
+                <h3 class="service-card-title">影视动画制作</h3>
+                <p class="service-card-title-en">Film & Animation</p>
+                <p class="service-card-desc">专业的视频制作团队，从创意到成片一站式服务</p>
+                <ul class="service-card-list">
+                    <li>三维动画制作</li>
+                    <li>视频剪辑与后期</li>
+                    <li>特效制作</li>
+                    <li>Minecraft动画项目</li>
+                </ul>
+            </div>
+            <div class="service-card stagger-3">
+                <span class="service-card-number">03</span>
+                <h3 class="service-card-title">游戏模组开发</h3>
+                <p class="service-card-title-en">Game Mod Development</p>
+                <p class="service-card-desc">深耕Minecraft生态，提供专业的模组开发服务</p>
+                <ul class="service-card-list">
+                    <li>Fabric/Forge/NeoForge模组</li>
+                    <li>数据包与材质包定制</li>
+                    <li>整合包制作</li>
+                    <li>服务器运营支持</li>
+                </ul>
+            </div>
+            <div class="service-card stagger-4">
+                <span class="service-card-number">04</span>
+                <h3 class="service-card-title">演示文稿设计</h3>
+                <p class="service-card-title-en">Presentation Design</p>
+                <p class="service-card-desc">专业的PPT设计，让您的演示更具说服力</p>
+                <ul class="service-card-list">
+                    <li>企业演示文稿</li>
+                    <li>产品发布PPT</li>
+                    <li>培训课件设计</li>
+                    <li>动态演示效果</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section features-section" id="features">
+        <div class="section-header reveal">
+            <span class="section-label">项目特色<span class="label-en">Our Features</span></span>
+            <h2 class="section-title">为什么选择我们</h2>
+            <p class="section-desc">专业团队、品质保证、创新驱动，为您创造卓越价值</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card stagger-1">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3 class="feature-title">技术全面</h3>
+                <p class="feature-title-en">Comprehensive Technology</p>
+                <p class="feature-desc">涵盖平面设计、影音制作、游戏开发等多个领域</p>
+            </div>
+            <div class="feature-card stagger-2">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3 class="feature-title">专业团队</h3>
+                <p class="feature-title-en">Professional Team</p>
+                <p class="feature-desc">拥有经验丰富的设计师和开发者</p>
+            </div>
+            <div class="feature-card stagger-3">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="feature-title">品质保证</h3>
+                <p class="feature-title-en">Quality Assurance</p>
+                <p class="feature-desc">严格的质量控制和项目交付标准</p>
+            </div>
+            <div class="feature-card stagger-4">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M22.08 9.08l-5.26-2.64-2.64-5.26a2 2 0 0 0-3.6 0L7.94 6.44l-5.26 2.64a2 2 0 0 0 0 3.6l5.26 2.64 2.64 5.26a2 2 0 0 0 3.6 0l2.64-5.26 5.26-2.64a2 2 0 0 0 0-3.6z"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+                </div>
+                <h3 class="feature-title">创新驱动</h3>
+                <p class="feature-title-en">Innovation Driven</p>
+                <p class="feature-desc">持续探索新技术和新创意</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+        <div class="section-header reveal">
+            <span class="section-label">联系我们<span class="label-en">Contact Us</span></span>
+            <h2 class="section-title">期待与您合作</h2>
+            <p class="section-desc">欢迎通过以下方式联系我们，开启合作之旅</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-card stagger-1">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <p class="contact-label">官方邮箱</p>
+                <p class="contact-label-en">Email</p>
+                <p class="contact-value">
+                    <a href="mailto:northland@xuanjian.top">northland@xuanjian.top</a>
+                </p>
+            </div>
+            <div class="contact-card stagger-2">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <p class="contact-label">官方网站</p>
+                <p class="contact-label-en">Website</p>
+                <p class="contact-value">
+                    <a href="https://xuanjian.top/beiyu" target="_blank">xuanjian.top/beiyu</a>
+                </p>
+            </div>
+            <div class="contact-card stagger-3">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <p class="contact-label">Gitee主页</p>
+                <p class="contact-label-en">Gitee</p>
+                <p class="contact-value">
+                    <a href="https://gitee.com/northland_studio" target="_blank">northland_studio</a>
+                </p>
+            </div>
+            <div class="contact-card stagger-4">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                </div>
+                <p class="contact-label">Github主页</p>
+                <p class="contact-label-en">Github</p>
+                <p class="contact-value">
+                    <a href="https://github.com/northland-studio/" target="_blank">northland-studio</a>
+                </p>
+            </div>
+            <div class="contact-card stagger-4">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </div>
+                <p class="contact-label">B站账号</p>
+                <p class="contact-label-en">Bilibili</p>
+                <p class="contact-value">
+                    <a href="https://space.bilibili.com/1103574784" target="_blank">北域工作室</a>
+                </p>
+            </div>
+            <div class="contact-card stagger-5">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <p class="contact-label">返回主站</p>
+                <p class="contact-label-en">Website</p>
+                <p class="contact-value">
+                    <a href="https://xuanjian.top/" target="_blank">xuanjian.top</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content reveal">
+            <h2 class="cta-title">准备好开始了吗？</h2>
+            <p class="cta-desc">让我们一起将创意变为现实，创造卓越的数字体验</p>
+            <a href="mailto:northland@xuanjian.top" class="cta-button">
+                立即联系我们
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="footer-logo-text">北域工作室</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#services">核心业务</a></li>
+                <li><a href="#features">项目特色</a></li>
+                <li><a href="#contact">联系我们</a></li>
+                <li><a href="https://gitee.com/northland_studio" target="_blank">Gitee</a></li>
+            </ul>
+            <p class="footer-copyright">© 2025 北域工作室 Northland Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const nav = document.getElementById('nav');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .about-card, .service-card, .feature-card, .contact-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '52px';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(255, 255, 255, 0.98)';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.padding = '20px';
+                navLinks.style.gap = '16px';
+                navLinks.style.borderBottom = '1px solid rgba(0, 0, 0, 0.08)';
+            }
+        });
+    </script>
+</body>
+</html>
